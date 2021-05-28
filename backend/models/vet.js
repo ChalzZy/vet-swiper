@@ -8,6 +8,7 @@ const vetSchema = new mongoose.Schema({
         lat: Number,
         lng: Number
     },
+    rating: Number,
 }, { collection: 'vet' })
 /*
 vetSchema.statics.find = async function(user) {
