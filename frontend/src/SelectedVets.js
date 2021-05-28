@@ -3,12 +3,15 @@ import CloseIcon from "@material-ui/icons/Close";
 import SupervisedUserCircleIcon from "@material-ui/icons/SupervisedUserCircle";
 import DoneIcon from "@material-ui/icons/Done";
 import { makeStyles } from "@material-ui/core/styles";
+import Chip from "@material-ui/core/Chip";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import StyledRating from "@material-ui/lab/Rating";
 import PetsIcon from "@material-ui/icons/Pets";
+import InsertEmoticonIcon from '@material-ui/icons/InsertEmoticon';
+import SentimentVeryDissatisfiedIcon from '@material-ui/icons/SentimentVeryDissatisfied';
 import { Grid } from "@material-ui/core";
 import { useEffect } from "react";
 
@@ -28,8 +31,8 @@ function SelectedVets({ vets }) {
   useEffect(() => {
     vets.forEach((vet) => {
       console.log(vet);
-    })
-  })
+    });
+  });
 
   return (
     <div className="vet-card-container">
@@ -44,8 +47,12 @@ function SelectedVets({ vets }) {
                     <Typography gutterBottom variant="h7" component="h2">
                       {vet.name}
                     </Typography>
+                    <div>{vet.vicinity}</div>
+                    {/* {vet.direction.equals('right') && } */}
                     <div>
-                      {vet.vicinity}
+                      <Chip 
+                        // icon={<InsertEmoticonIcon />}
+                        label={vet.direction} />
                     </div>
                   </CardContent>
                 </CardActionArea>
