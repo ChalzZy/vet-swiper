@@ -10,7 +10,7 @@ function VetClinicProfile({ id }) {
   const [vets, setVets] = useState([]);
 
   useEffect(() => {
-    let url = "http://localhost:2300/getprofiles?id=ChIJPbtydgVIDW0RoLGPPZg9-6w";
+    let url = `http://localhost:2300/getprofiles?id=${id}`;
 
     let options = {
       method: 'GET',

@@ -30,6 +30,7 @@ export default function SwipeCard(props) {
   const [displaySwipe, setDisplaySwipe] = useState(false);
   const [displaySelected, setDisplaySelected] = useState(false);
   const [selectedId, setSelectedId] = useState("");
+  const [vetHistory, setVetHistory] = useState([]);
 
   useEffect(() => {
     const url = "http://localhost:2300/getvet";
@@ -46,7 +47,6 @@ export default function SwipeCard(props) {
       .catch((err) => console.error("error:" + err));
   }, []);
 
-  const alreadyRemoved = [];
   let charactersState = vets;
 
   const [lastDirection, setLastDirection] = useState();
@@ -58,10 +58,12 @@ export default function SwipeCard(props) {
     []
   );
 
-  const swiped = (direction, idToDelete) => {
-    console.log("removing: " + idToDelete);
+  const swiped = (direction, vetToDelete) => {
+    console.log("removing: " + vetToDelete);
     setLastDirection(direction);
-    alreadyRemoved.push(idToDelete);
+    setVetHistory((prevVetsToDelete) => ([...prevVetsToDelete, vetToDelete]));
+    console.log("!!!!!!!!! AAAAAAAA" + vetToDelete.name)
+    console.log(JSON.stringify(vetToDelete))
   };
 
   const outOfFrame = (place_id) => {
@@ -100,7 +102,7 @@ export default function SwipeCard(props) {
   };
 
   if (displaySelected) {
-    return <SelectedVets vets={alreadyRemoved} />;
+    return <SelectedVets vets={vetHistory} />;
   }
 
   if (displaySwipe) {
@@ -115,13 +117,14 @@ export default function SwipeCard(props) {
             ref={childRefs[index]}
             className="swipe-card"
             key={vet.place_id}
-            onSwipe={(dir) => swiped(dir, vet.place_id)}
+            onSwipe={(dir) => swiped(dir, vet)}
             onCardLeftScreen={() => outOfFrame(vet.place_id)}
+            // onClick={()}
           >
             <div className="card">
               <Card className={classes.root}>
                 <CardActionArea>
-                  <CardLocation location={props.location} />
+                  <CardLocation location={vet.location} />
                   <CardContent>
                     <div className="card-content">
                       <div>

@@ -10,6 +10,7 @@ import Typography from "@material-ui/core/Typography";
 import StyledRating from "@material-ui/lab/Rating";
 import PetsIcon from "@material-ui/icons/Pets";
 import { Grid } from "@material-ui/core";
+import { useEffect } from "react";
 
 const useStyles = makeStyles({
   root: {
@@ -24,6 +25,12 @@ const useStyles = makeStyles({
 function SelectedVets({ vets }) {
   const classes = useStyles();
 
+  useEffect(() => {
+    vets.forEach((vet) => {
+      console.log(vet);
+    })
+  })
+
   return (
     <div className="vet-card-container">
       <h3>Vets:</h3>
@@ -33,45 +40,12 @@ function SelectedVets({ vets }) {
             <Grid key={index} item>
               <Card className={classes.root}>
                 <CardActionArea>
-                  <CardLocation location={vet.location} />
                   <CardContent>
-                    <div className="card-content">
-                      <div>
-                        <Typography gutterBottom variant="h5" component="h2">
-                          {vet.name}
-                        </Typography>
-                        <StyledRating
-                          name="customized-color"
-                          defaultValue={4}
-                          getLabelText={(value) =>
-                            `${value} Heart${value !== 1 ? "s" : ""}`
-                          }
-                          precision={0.5}
-                          icon={<PetsIcon fontSize="inherit" />}
-                          readOnly
-                        />
-                        <Typography
-                          variant="body1"
-                          color="textSecondary"
-                          component="p"
-                        >
-                          <div className="card-sub-text">{vet.vicinity}</div>
-                        </Typography>
-                      </div>
-                      {/* <div>
-                        <Button
-                          size="large"
-                          variant="contained"
-                          color="primary"
-                          className={classes.button}
-                          startIcon={<SupervisedUserCircleIcon />}
-                          onClick={() => {
-                            goToProfile(vet.place_id);
-                          }}
-                        >
-                          Check us out!
-                        </Button>
-                      </div> */}
+                    <Typography gutterBottom variant="h7" component="h2">
+                      {vet.name}
+                    </Typography>
+                    <div>
+                      {vet.vicinity}
                     </div>
                   </CardContent>
                 </CardActionArea>
