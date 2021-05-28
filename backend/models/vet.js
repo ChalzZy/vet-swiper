@@ -1,3 +1,7 @@
+/**
+ * Model for a vet practice
+ */
+
 const mongoose = require('mongoose')
 
 const vetSchema = new mongoose.Schema({
@@ -10,9 +14,5 @@ const vetSchema = new mongoose.Schema({
     },
     rating: Number,
 }, { collection: 'vet' })
-/*
-vetSchema.statics.find = async function(user) {
-    const vet = await this.findOne({ user })
-}
-*/
+
 module.exports = vetSchema;

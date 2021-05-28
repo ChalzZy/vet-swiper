@@ -5,20 +5,21 @@ const cors = require('cors')
 const app = express();
 const vetSchema = require("./models/vet.js");
 const profileSchema = require("./models/profile.js");
-
-app.use(cors())
-
 const port = 2300;
 
+// middleware
+app.use(cors())
 app.use(express.json());
 
+// ejs engine
 app.set("view engine", "ejs");
 
+// render test ejs
 app.get("/", (req, res) => {
   res.render("home");
 });
 
-// database connection
+// database connection and launch server
 const dbURI =
   "mongodb+srv://user:user@vetswiper.adugw.mongodb.net/ezyvet?retryWrites=true&w=majority";
 mongoose
@@ -32,9 +33,12 @@ mongoose
     console.log(`Server open on localhost:${port}`);
   })
   .catch((err) => console.log(err));
+
+// Initiate models
 const Vet = mongoose.model("vet", vetSchema);
 const Profile = mongoose.model("profile", profileSchema);
 
+// gets all vets practices in database
 app.get("/getvet", async (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header(
@@ -51,6 +55,8 @@ app.get("/getvet", async (req, res) => {
   }
 });
 
+
+// get all profiles based on vet id
 app.get("/getprofiles", async (req, res) => {
   const id = req.query.id;
   console.log(id);
@@ -69,8 +75,3 @@ app.get("/getprofiles", async (req, res) => {
     console.log(e);
   }
 });
-/*
-app.listen(port, () => {
-  console.log(`VetSwiper Backend listening at http://localhost:${port}`)
-})
-*/

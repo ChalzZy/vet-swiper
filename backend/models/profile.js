@@ -1,3 +1,7 @@
+/**
+ * Model for the profile of a vet practioner
+ */
+
 const mongoose = require('mongoose')
 
 const profileSchema = new mongoose.Schema({
