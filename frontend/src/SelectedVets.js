@@ -1,19 +1,12 @@
-import CardLocation from "./components/CardLocation";
-import CloseIcon from "@material-ui/icons/Close";
-import SupervisedUserCircleIcon from "@material-ui/icons/SupervisedUserCircle";
-import DoneIcon from "@material-ui/icons/Done";
 import { makeStyles } from "@material-ui/core/styles";
 import Chip from "@material-ui/core/Chip";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
-import StyledRating from "@material-ui/lab/Rating";
-import PetsIcon from "@material-ui/icons/Pets";
-import InsertEmoticonIcon from '@material-ui/icons/InsertEmoticon';
-import SentimentVeryDissatisfiedIcon from '@material-ui/icons/SentimentVeryDissatisfied';
 import { Grid } from "@material-ui/core";
-import { useEffect } from "react";
+import VetClinicProfile from "./VetClinic";
+import { useEffect, useState } from "react";
 
 const useStyles = makeStyles({
   root: {
@@ -25,8 +18,11 @@ const useStyles = makeStyles({
   },
 });
 
-function SelectedVets({ vets }) {
+function SelectedVets({ vets, id,  clinicName }) {
   const classes = useStyles();
+
+  const [viewVetProfile, setViewVetProfile] = useState(false);
+  const [activeId, setActiveId] = useState();
 
   useEffect(() => {
     vets.forEach((vet) => {
@@ -34,24 +30,35 @@ function SelectedVets({ vets }) {
     });
   });
 
+  const updateViewVetProfile = (id) => {
+    setActiveId(id);
+    setViewVetProfile((prevVal) => !prevVal);
+  }
+
+  if (viewVetProfile) {
+    return (
+      <div>
+        <VetClinicProfile id={activeId} rating={4.5} />
+      </div>
+    )
+  }
+
   return (
     <div className="vet-card-container">
-      <h3>Vets:</h3>
+      <h3>History:</h3>
       <div className="vet-card">
         <Grid container spacing={5}>
           {vets.map((vet, index) => (
             <Grid key={index} item>
-              <Card className={classes.root}>
+              <Card className={classes.root} onClick={() => {updateViewVetProfile(vet.place_id)}}>
                 <CardActionArea>
                   <CardContent>
                     <Typography gutterBottom variant="h7" component="h2">
                       {vet.name}
                     </Typography>
                     <div>{vet.vicinity}</div>
-                    {/* {vet.direction.equals('right') && } */}
                     <div>
                       <Chip 
-                        // icon={<InsertEmoticonIcon />}
                         label={vet.direction} />
                     </div>
                   </CardContent>

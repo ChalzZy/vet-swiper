@@ -5,6 +5,11 @@
   flex-direction: column;
   width: 100%;
 }
+.swipe-card-header {
+  position: absolute;
+  top: 5px;
+  left: 43%;
+}
 
 .swipe-card {
   width: 70%;
@@ -62,4 +67,8 @@
 .view-history-button {
   position: absolute;
   bottom: 20px;
+}
+
+.random-pets-container {
+  font-size: 18px;
 }

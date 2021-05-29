@@ -1,9 +1,7 @@
 import CardLocation from "./CardLocation";
 import "./SwipeCard.css";
 import React, { useEffect, useState, useMemo, useRef } from "react";
-import CloseIcon from "@material-ui/icons/Close";
 import SupervisedUserCircleIcon from "@material-ui/icons/SupervisedUserCircle";
-import DoneIcon from "@material-ui/icons/Done";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
@@ -18,6 +16,7 @@ import SelectedVets from "../SelectedVets";
 import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import ThumbDownIcon from "@material-ui/icons/ThumbDown";
 import HistoryIcon from "@material-ui/icons/History";
+import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
 
 const fetch = require("node-fetch");
 
@@ -61,6 +60,20 @@ export default function SwipeCard(props) {
     []
   );
 
+  const generateVet = () => {
+      let random = Math.floor(Math.random() * 4)
+
+      if (random === 0) {
+          return "Perfect for: 🐶 😸"
+      } else if (random === 1) {
+          return "Perfect for: 🐦 😸 🐶"
+      } else if (random === 2) {
+          return "Perfect for: 😸"
+      } else {
+          return "Perfect for: 🐶"
+      }
+  }
+
   const viewMainPage = () => {
     setDisplaySwipe(false);
     setDisplaySelected(false);
@@ -81,22 +94,6 @@ export default function SwipeCard(props) {
     setVets(charactersState);
   };
 
-  // const swipe = (dir) => {
-  //   const cardsLeft = vets.filter(
-  //     (person) => !alreadyRemoved.includes(person.place_id)
-  //   );
-  //   if (cardsLeft.length) {
-  //     const toBeRemoved = cardsLeft[cardsLeft.length - 1].place_id; // Find the card object to be removed
-  //     console.log(JSON.stringify(vetsList.current));
-  //     const vetsTemp = vetsList;
-  //     const index = vetsTemp
-  //       ?.map((person) => person.place_id)
-  //       .indexOf(toBeRemoved); // Find the index of which to make the reference to
-  //     alreadyRemoved.push(toBeRemoved); // Make sure the next card gets removed next time if this card do not have time to exit the screen
-  //     childRefs[index].current.swipe(dir); // Swipe the card!
-  //   }
-  // };
-
   const classes = useStyles();
 
   const goToProfile = (id) => {
@@ -109,30 +106,52 @@ export default function SwipeCard(props) {
   };
 
   if (displaySelected) {
-    return <SelectedVets vets={vetHistory} id={selectedId} />;
+    return (
+      <div>
+        <div className="swipe-card-header">
+          <img src="logo.png" alt="logo" width="250px" />
+        </div>
+        <Button
+          size="large"
+          variant="contained"
+          color="primary"
+          className={classes.button}
+          startIcon={<KeyboardBackspaceIcon />}
+          onClick={() => viewMainPage()}
+        >
+          Back
+        </Button>
+        <SelectedVets vets={vetHistory} id={selectedId} />
+      </div>
+    );
   }
 
   if (displaySwipe) {
     return (
       <div>
+        <div className="swipe-card-header">
+          <img src="logo.png" alt="logo" width="250px" />
+        </div>
         <Button
           size="large"
           variant="contained"
-          color="secondary"
+          color="primary"
           className={classes.button}
-          startIcon={<CloseIcon />}
+          startIcon={<KeyboardBackspaceIcon />}
           onClick={() => viewMainPage()}
         >
-          Naaa
+          Back
         </Button>
-        <VetClinicProfile id={selectedId} />
+        <VetClinicProfile id={selectedId} rating={4.5} />
       </div>
     );
   }
 
   return (
     <div className="swipe-card-container">
-      <div className="back-button"></div>
+      <div className="swipe-card-header">
+        <img src="logo.png" alt="logo" width="250px" />
+      </div>
       <div className="sub-swipe-card-container">
         {vets.map((vet, index) => (
           <TinderCard
@@ -141,7 +160,6 @@ export default function SwipeCard(props) {
             key={vet.place_id}
             onSwipe={(dir) => swiped(dir, vet)}
             onCardLeftScreen={() => outOfFrame(vet.place_id)}
-            // onClick={()}
           >
             <div className="card">
               <Card className={classes.root}>
@@ -155,10 +173,7 @@ export default function SwipeCard(props) {
                         </Typography>
                         <StyledRating
                           name="customized-color"
-                          defaultValue={4}
-                          getLabelText={(value) =>
-                            `${value} Heart${value !== 1 ? "s" : ""}`
-                          }
+                          defaultValue={vet.rating}
                           precision={0.5}
                           icon={<PetsIcon fontSize="inherit" />}
                           readOnly
@@ -172,6 +187,7 @@ export default function SwipeCard(props) {
                         </Typography>
                       </div>
                       <div>
+                        <div>
                         <Button
                           size="large"
                           variant="contained"
@@ -184,6 +200,10 @@ export default function SwipeCard(props) {
                         >
                           View Clinic
                         </Button>
+                        </div>
+                        <div className="random-pets-container">
+                          {generateVet()}
+                        </div>
                       </div>
                     </div>
                   </CardContent>
@@ -193,28 +213,6 @@ export default function SwipeCard(props) {
           </TinderCard>
         ))}
       </div>
-      {/* <div className="swipe-card-button">
-        <Button
-          size="large"
-          variant="contained"
-          color="primary"
-          className={classes.button}
-          startIcon={<DoneIcon />}
-          onClick={() => swipe("left")}
-        >
-          Yeah
-        </Button>
-        <Button
-          size="large"
-          variant="contained"
-          color="secondary"
-          className={classes.button}
-          startIcon={<CloseIcon />}
-          onClick={() => swipe("right")}
-        >
-          Naaa
-        </Button>
-      </div> */}
       {lastDirection ? (
         <h2 key={lastDirection} className="infoText">
           You swiped {lastDirection}
