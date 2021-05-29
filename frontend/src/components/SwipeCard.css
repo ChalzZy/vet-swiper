@@ -11,6 +11,13 @@
   position: absolute;
   top: 10vh;
   left: 15vw;
+  border-width: 10px;
+}
+
+.back-button {
+  position: absolute;
+  top: 10px;
+  left: 10px;
 }
 
 .card-sub-text {
@@ -46,6 +53,10 @@
 .infoText {
   position: absolute;
   bottom: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .view-history-button {

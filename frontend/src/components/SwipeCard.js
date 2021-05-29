@@ -15,6 +15,9 @@ import PetsIcon from "@material-ui/icons/Pets";
 import TinderCard from "react-tinder-card";
 import VetClinicProfile from "../VetClinic";
 import SelectedVets from "../SelectedVets";
+import ThumbUpIcon from "@material-ui/icons/ThumbUp";
+import ThumbDownIcon from "@material-ui/icons/ThumbDown";
+import HistoryIcon from "@material-ui/icons/History";
 
 const fetch = require("node-fetch");
 
@@ -58,12 +61,16 @@ export default function SwipeCard(props) {
     []
   );
 
+  const viewMainPage = () => {
+    setDisplaySwipe(false);
+    setDisplaySelected(false);
+  };
+
   const swiped = (direction, vetToDelete) => {
     console.log("removing: " + vetToDelete);
     setLastDirection(direction);
-    setVetHistory((prevVetsToDelete) => ([...prevVetsToDelete, vetToDelete]));
-    console.log("!!!!!!!!! AAAAAAAA" + vetToDelete.name)
-    console.log(JSON.stringify(vetToDelete))
+    vetToDelete.direction = direction;
+    setVetHistory((prevVetsToDelete) => [...prevVetsToDelete, vetToDelete]);
   };
 
   const outOfFrame = (place_id) => {
@@ -102,15 +109,30 @@ export default function SwipeCard(props) {
   };
 
   if (displaySelected) {
-    return <SelectedVets vets={vetHistory} />;
+    return <SelectedVets vets={vetHistory} id={selectedId} />;
   }
 
   if (displaySwipe) {
-    return <VetClinicProfile id={selectedId} />;
+    return (
+      <div>
+        <Button
+          size="large"
+          variant="contained"
+          color="secondary"
+          className={classes.button}
+          startIcon={<CloseIcon />}
+          onClick={() => viewMainPage()}
+        >
+          Naaa
+        </Button>
+        <VetClinicProfile id={selectedId} />
+      </div>
+    );
   }
 
   return (
     <div className="swipe-card-container">
+      <div className="back-button"></div>
       <div className="sub-swipe-card-container">
         {vets.map((vet, index) => (
           <TinderCard
@@ -199,9 +221,13 @@ export default function SwipeCard(props) {
         </h2>
       ) : (
         <h2 className="infoText">
-          <div>Yeah! Swipe Left!</div>
-          <div>Naaa! Swipe Right!</div>
-          <div>Click to get more info</div>
+          <div style={{ color: "green" }}>
+            <ThumbUpIcon /> Swipe Right
+          </div>
+          <div style={{ color: "red" }}>
+            <ThumbDownIcon /> Swipe Left
+          </div>
+          <div>Click view clinic to get more info</div>
         </h2>
       )}
       <div className="view-history-button">
@@ -210,7 +236,7 @@ export default function SwipeCard(props) {
           variant="contained"
           color="primary"
           className={classes.button}
-          startIcon={<SupervisedUserCircleIcon />}
+          startIcon={<HistoryIcon />}
           onClick={() => {
             viewSelectedVets();
           }}
